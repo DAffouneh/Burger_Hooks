@@ -2,6 +2,8 @@ import React from 'react';
 import classes from './SideDrawer.css';
 import Logo from '../../Logo/Logo';
 import NavigationItems from '../../Navigation/NavigationItems/NavigationItems';
+import Axu from '../../../hoc/ux/ux';
+import Backdrop from '../../UI/Backdrop/Backdrop';
 const sidedrawer = (props)=> {
 let attacedClass= [classes.SideDrawer , classes.Close];
 if(props.open)
@@ -10,7 +12,9 @@ if(props.open)
 }
 
 return (
-    <div className={attacedClass.join(' ')}>
+    <Axu>
+        <Backdrop show={props.open} clicked={props.closed}></Backdrop>
+        <div className={attacedClass.join(' ')}>
         <div className={classes.Logo}>
             <Logo />
         </div>
@@ -18,6 +22,9 @@ return (
             <NavigationItems />
         </nav>
     </div>
+
+    </Axu>
+    
 
 );
 

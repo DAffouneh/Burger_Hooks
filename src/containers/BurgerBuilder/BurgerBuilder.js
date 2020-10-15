@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import Burger from '../../components/Burger/Burger';
 import BurgerControls from '../../components/Burger/BuildControls/BurgerControls';
-
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSammary from '../../components/Burger/OrderSummary/OrderSummary';
 const INGREDIENT_PRICES = {
     salad: 0.5,
     cheese: 0.4,
@@ -14,6 +15,9 @@ const burgerBuilder=props=> {
     const [ingredients,setIngredients]=useState({ salad: 0,bacon: 0,cheese: 0, meat: 0})
     const [totalPrice,setTotalPrice]=useState(4)
     const [purchasable,setPurchasing]=useState(false)
+    const [purchasing,setPurchasingT]=useState(false)
+
+   
 
    const updatePurchaseState= (ingredients) =>{
         const sum = Object.keys( ingredients )
@@ -24,6 +28,10 @@ const burgerBuilder=props=> {
                 return sum + el;
             }, 0 );
             setPurchasing( sum > 0 )
+    }
+    const purchasingHandler =()=>
+    {
+        setPurchasingT(true);
     }
     
      const addIngredientHandler = ( type ) => {
@@ -59,24 +67,48 @@ const burgerBuilder=props=> {
         updatePurchaseState(updatedIngredients);
     }
 
+    const modalremovalHandler=()=> 
+    {
+        setPurchasingT(false);
+
+    }
     
         const disabledInfo= {
             ...ingredients
         };
         for ( let key in disabledInfo ) {
             disabledInfo[key] = disabledInfo[key] <= 0
-        }
+    
+    }
+  const  purchaseCancelHandler =()=>
+{
+   setPurchasingT(false);
+}
+    const purchaseContinueHandler =()=>
+{
+    alert("you continue!")
+
+}
         return (
             <div>
+                <Modal show={purchasing} modalClosed={modalremovalHandler}>
+                    <OrderSammary ingredients={ingredients}
+                     price={totalPrice} 
+                     cancel={purchaseCancelHandler}
+                     continue={purchaseContinueHandler}/>
+
+                </Modal>
                 <Burger ingredients={ingredients} />
                 <BurgerControls
                     ingredientAdded={addIngredientHandler}
                     ingredientRemoved={removeIngredientHandler}
                     disabled={disabledInfo}
                     purchasable={purchasable}
+                    order={purchasingHandler}
                     price={totalPrice} />
             </div>
         );
     }
+
 
 export default burgerBuilder;
