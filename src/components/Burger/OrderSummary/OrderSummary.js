@@ -1,4 +1,6 @@
 import React from 'react';
+import Button from '../../UI/Button/Button';
+import Axu from '../../../hoc/ux/ux';
 const orderSammry =(props)=>
 {
 
@@ -10,18 +12,18 @@ const orderSammry =(props)=>
                
             </li>
         );
-    })
-return (
-    <div>
+    });
+return (<Axu>
         <h3>Your Order</h3>
         <p>A Delicious Burger With Following Ingredients: </p>
                {ingredientsSammary}        
-        <p>Total price: <strong> 5.5 $</strong></p>
+        <p>Total price: <strong>{props.price.toFixed(2)} $</strong></p>
         <p>Continue To Checkout?</p>
 
-
-
-    </div>
+        <Button btnType="Danger" clicked={props.cancel}>CANCEL</Button>
+        <Button btnType="Success" clicked={props.continue}>CONTINUE</Button>
+    </Axu>
+  
 );
     
 };
