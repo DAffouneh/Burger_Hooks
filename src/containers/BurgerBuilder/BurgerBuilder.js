@@ -107,32 +107,33 @@ const burgerBuilder=props=> {
 }
     const purchaseContinueHandler =()=>
 {
-     setLoading(true)
-    const order = {
-        ingredients:ingredients,
-        price:totalPrice,
-        customer: {
-            name: 'baker',
-            address: {
-                street: 'Teststreet 1',
-                zipCode: '41351',
-                country: 'Germany'
-            },
-            email: 'test@test.com'
-        },
-        deliveryMethod: 'fastest'
-    }
-     axios.post( '/orders.json', order )
+  //   setLoading(true)
+   // const order = {
+     //   ingredients:ingredients,
+      //  price:totalPrice,
+      //  customer: {
+       //     name: 'baker',
+       //     address: {
+       //         street: 'Teststreet 1',
+       //         zipCode: '41351',
+       //         country: 'Germany'
+        //    },
+        //    email: 'test@test.com'
+       // },
+       // deliveryMethod: 'fastest'
+   // }
+    // axios.post( '/orders.json', order )
    
-        .then( response => {
-           setLoading(false)
-           setPurchasingT(false)
+       // .then( response => {
+        //   setLoading(false)
+        //   setPurchasingT(false)
         
-        } )
-        .catch( error => {
-            setLoading(false)
-           setPurchasingT(false)
-        } );
+     //   } )
+      //  .catch( error => {
+      //      setLoading(false)
+      //     setPurchasingT(false)
+      //  } );
+      props.history.push('/checkout');
 
 }
 let OrderSummary= null;
