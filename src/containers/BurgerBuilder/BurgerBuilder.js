@@ -133,7 +133,16 @@ const burgerBuilder=props=> {
       //      setLoading(false)
       //     setPurchasingT(false)
       //  } );
-      props.history.push('/checkout');
+      const queryParams = [];
+      for (let i in ingredients) {
+          queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]));
+      }
+      queryParams.push('price=' + totalPrice);
+      const queryString = queryParams.join('&');
+      props.history.push({
+          pathname: '/checkout',
+          search: '?' + queryString
+      });
 
 }
 let OrderSummary= null;
