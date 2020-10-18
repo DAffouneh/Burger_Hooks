@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import Burger from '../../components/Burger/Burger';
 import BurgerControls from '../../components/Burger/BuildControls/BurgerControls';
 import Modal from '../../components/UI/Modal/Modal';
@@ -16,11 +16,28 @@ const INGREDIENT_PRICES = {
 };
 
 const burgerBuilder=props=> { 
-    const [ingredients,setIngredients]=useState({ salad: 0,bacon: 0,cheese: 0, meat: 0})
+    const [ingredients,setIngredients]=useState(null)
     const [totalPrice,setTotalPrice]=useState(4)
     const [purchasable,setPurchasing]=useState(false)
     const [purchasing,setPurchasingT]=useState(false)
-   const[loading,setLoading]=useState(false)
+    const[loading,setLoading]=useState(false)
+    const[error,setError]=useState(false)
+
+   
+
+    useEffect (async ()=> {
+        
+        await axios.get('https://react-my-burger-6ba03.firebaseio.com/ingredients.json')
+        .then(response => {
+            setIngredients(response.data);
+                      })
+                      .catch(error =>{
+                          setError(true)
+                      });
+
+    },[])
+
+
    
 
    const updatePurchaseState= (ingredients) =>{
@@ -91,7 +108,6 @@ const burgerBuilder=props=> {
     const purchaseContinueHandler =()=>
 {
      setLoading(true)
-    //this.setState( { loading: true } );
     const order = {
         ingredients:ingredients,
         price:totalPrice,
@@ -110,38 +126,47 @@ const burgerBuilder=props=> {
    
         .then( response => {
            setLoading(false)
-           setPurchasing(false)
+           setPurchasingT(false)
         
         } )
         .catch( error => {
             setLoading(false)
-           setPurchasing(false)
+           setPurchasingT(false)
         } );
 
 }
-let OrderSummary= <OrderSammary 
-ingredients={ingredients}
-price={totalPrice} 
-cancel={purchaseCancelHandler}
-continue={purchaseContinueHandler}/>
- if(loading){
+let OrderSummary= null;
+let burger=error ? <p>Ingredients can't be loaded!</p>:<Spinner />
+if(ingredients)
+{
+    burger = (
+        <Aux>
+            <Burger ingredients={ingredients} />
+            <BurgerControls
+            ingredientAdded={addIngredientHandler}
+            ingredientRemoved={removeIngredientHandler}
+            disabled={disabledInfo}
+            purchasable={purchasable}
+            order={purchasingHandler}
+            price={totalPrice} /></Aux>
+    );
+    OrderSummary= <OrderSammary 
+    ingredients={ingredients}
+    price={totalPrice} 
+    cancel={purchaseCancelHandler}
+    continue={purchaseContinueHandler}/>
+}
+if(loading)
+{
     OrderSummary=<Spinner />
- }
-
+}
+ 
         return (
             <Aux>
-                <Modal show={purchasing} modalClosed={modalremovalHandler}>
-                    
+                <Modal show={purchasing} modalClosed={modalremovalHandler}>  
                  {OrderSummary}
                 </Modal>
-                <Burger ingredients={ingredients} />
-                <BurgerControls
-                    ingredientAdded={addIngredientHandler}
-                    ingredientRemoved={removeIngredientHandler}
-                    disabled={disabledInfo}
-                    purchasable={purchasable}
-                    order={purchasingHandler}
-                    price={totalPrice} />
+               {burger}
             </Aux>
         );
     }
