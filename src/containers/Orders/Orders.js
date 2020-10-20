@@ -1,11 +1,9 @@
 import React, {useState,useEffect } from 'react';
-
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner'
-const Orders=props=>  {
-    
+const Orders=props=>  {   
  const [orders,setOrders]=useState(null)
  const[loading,setLoading]=useState(true)
     useEffect(()=> {
@@ -38,9 +36,7 @@ const Orders=props=>  {
           </div>
         );
             }
-    
             return ordersRender;
     }
-
-
+    
 export default withErrorHandler(Orders, axios);
